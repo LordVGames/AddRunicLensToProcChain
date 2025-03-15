@@ -1,2 +1,2 @@
 rem If you aren't lordvgames you'll need to change the paths
-"C:\Program Files\7-Zip\7z.exe" a -tzip "E:\RoR2 Modding\ModName\Thunderstore\ModName.zip" -x!*.zip "E:\RoR2 Modding\ModName\Thunderstore\Package Files\*"
+"C:\Program Files\7-Zip\7z.exe" a -tzip "E:\RoR2 Modding\AddRunicLensToProcChain\Thunderstore\AddRunicLensToProcChain.zip" -x!*.zip "E:\RoR2 Modding\AddRunicLensToProcChain\Thunderstore\Package Files\*"
