@@ -9,7 +9,7 @@ namespace AddRunicLensToProcChain
 {
     internal static class Main
     {
-        internal static void MakeRunicLensAddItselfToProcChainMask(ILContext il)
+        internal static void AddRunicLensToProcChainMask(ILContext il)
         {
             ILCursor c = new(il);
             // moving before "component2.RunicLensUpdateVariables"
@@ -40,7 +40,7 @@ namespace AddRunicLensToProcChain
             }
         }
 
-        internal static void MakeRunicLensUseTheActualProcChainMask(ILContext il)
+        internal static void UseTheActualProcChainMaskGodDamnit(ILContext il)
         {
             ILCursor c = new(il);
             // moving after "procChainMask = default(ProcChainMask)"

@@ -1,8 +1,8 @@
 ﻿{
-	"name": "MyFirstMod",
+	"name": "AddRunicLensToProcChain",
 	"version_number": "1.0.0",
-	"website_url": "",
-	"description": "My first Mod",
+	"website_url": "https://github.com/LordVGames/AddRunicLensToProcChain",
+	"description": "Makes runic lens add itself to the proc chain mask, preventing it from being able to infinitely proc itself & your other proc items over and over.",
 	"dependencies": [
 		"bbepis-BepInExPack-5.4.2117",
 		"RiskofThunder-HookGenPatcher-1.2.5"

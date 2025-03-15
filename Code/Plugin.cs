@@ -13,8 +13,8 @@ namespace AddRunicLensToProcChain
         public void Awake()
         {
             Log.Init(Logger);
-            IL.RoR2.GlobalEventManager.ProcessHitEnemy += Main.MakeRunicLensAddItselfToProcChainMask;
-            IL.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor += Main.MakeRunicLensUseTheActualProcChainMask;
+            IL.RoR2.GlobalEventManager.ProcessHitEnemy += Main.AddRunicLensToProcChainMask;
+            IL.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor += Main.UseTheActualProcChainMaskGodDamnit;
 #if DEBUG
             On.RoR2.HealthComponent.TakeDamage += Main.HealthComponent_TakeDamage;
 #endif
