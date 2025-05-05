@@ -7,7 +7,13 @@ This mod fixes all of that by making runic lens add itself to the proc chain mas
 <sup><sub>Fun fact: the vanilla game checks for runic lens in the proc chain mask the same as other proc items, but because it's never added to the proc chain mask, the check is useless.</sub></sup>
 
 ## Before
+
+(using 50 clovers for practically guranteed procs)
+
 ![Risk_of_Rain_2_1mZWRcRUyj](https://github.com/user-attachments/assets/8e14e02e-33c3-4e24-89eb-b5e80d85217d)
 
 ## After
+
+(also using 50 clovers for practically guranteed procs)
+
 ![Risk_of_Rain_2_OXpmKEZ7W1](https://github.com/user-attachments/assets/062bd247-9230-450a-8329-0377823e51a6)

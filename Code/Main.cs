@@ -12,10 +12,10 @@ namespace AddRunicLensToProcChain
         internal static void AddRunicLensToProcChainMask(ILContext il)
         {
             ILCursor c = new(il);
-            // moving before "component2.RunicLensUpdateVariables"
+            // moving before "characterBody.RunicLensUpdateVariables"
             if (!c.TryGotoNext(MoveType.Before,
-                x => x.MatchLdloc(1),
-                x => x.MatchLdloc(147),
+                x => x.MatchLdloc(0),
+                x => x.MatchLdloc(152),
                 x => x.MatchLdarg(1)
             ))
             {

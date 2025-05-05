@@ -9,7 +9,7 @@ namespace AddRunicLensToProcChain
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "LordVGames";
         public const string PluginName = "AddRunicLensToProcChain";
-        public const string PluginVersion = "1.0.0";
+        public const string PluginVersion = "1.0.2";
         public void Awake()
         {
             Log.Init(Logger);

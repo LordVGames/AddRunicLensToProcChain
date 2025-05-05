@@ -1,6 +1,6 @@
 ﻿{
 	"name": "AddRunicLensToProcChain",
-	"version_number": "1.0.1",
+	"version_number": "1.0.2",
 	"website_url": "https://github.com/LordVGames/AddRunicLensToProcChain",
 	"description": "Fixes Runic Lens being able to restart any proc chains it's in, potentially infinitely with enough luck & other proc items.",
 	"dependencies": [

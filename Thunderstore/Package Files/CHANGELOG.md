@@ -1,3 +1,7 @@
+## 1.0.2
+
+- Fixed for SOTS phase 3
+
 ## 1.0.1
 - Changed description to help discoverability
 - - This is technically a fix mod, but the name/icon/description weren't really saying it is
