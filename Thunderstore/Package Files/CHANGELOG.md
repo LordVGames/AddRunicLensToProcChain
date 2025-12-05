@@ -1,3 +1,11 @@
+## 1.0.4
+
+- Fixed for MonoDetour 0.7.6
+
+## 1.0.3
+
+- Fixed for AC release
+
 ## 1.0.2
 
 - Fixed for SOTS phase 3

@@ -3,86 +3,62 @@ using System.Collections.Generic;
 using System.Text;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
+using MonoDetour;
 using RoR2;
+using MonoDetour.Cil;
 
 namespace AddRunicLensToProcChain
 {
     internal static class Main
     {
-        internal static void AddRunicLensToProcChainMask(ILContext il)
+        internal static void AddRunicLensToProcChainMask(ILManipulationInfo info)
         {
-            ILCursor c = new(il);
+            ILWeaver w = new(info);
             // moving before "characterBody.RunicLensUpdateVariables"
-            if (!c.TryGotoNext(MoveType.Before,
-                x => x.MatchLdloc(0),
-                x => x.MatchLdloc(152),
-                x => x.MatchLdarg(1)
-            ))
-            {
-                Log.Error("COULD NOT IL HOOK IL.RoR2.GlobalEventManager.ProcessHitEnemy");
-                LogILStuff(il, c);
-                return;
-            }
-            try
-            {
-                // gearbox added a proctype for runic lens AND they check for it before proccing
-                // but they forgot to make runic lens add it's proctype to the procchainmask when it procs?????????????
-                c.Emit(OpCodes.Ldarg_1);
-                c.EmitDelegate<Action<DamageInfo>>((damageInfo) =>
+            w.MatchRelaxed(
+                x => x.MatchLdloc(out _) && w.SetCurrentTo(x),
+                x => x.MatchLdloc(out _),
+                x => x.MatchLdarg(out _),
+                x => x.MatchLdloc(out _),
+                x => x.MatchCallOrCallvirt<CharacterBody>("RunicLensUpdateVariables")
+            ).ThrowIfFailure();
+            w.InsertBeforeCurrent(
+                w.Create(OpCodes.Ldarg_1),
+                w.CreateDelegateCall((DamageInfo damageInfo) =>
                 {
+                    // gearbox added a proctype for runic lens AND they check for it before proccing
+                    // but they forgot to make runic lens add it's proctype to the procchainmask when it procs?????????????
                     damageInfo.procChainMask.AddProc(ProcType.MeteorAttackOnHighDamage);
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Error($"COULD NOT EMIT INTO IL.RoR2.GlobalEventManager.ProcessHitEnemy DUE TO:\n{e}");
-                LogILStuff(il, c);
-            }
+                })
+            );
         }
 
-        internal static void UseTheActualProcChainMaskGodDamnit(ILContext il)
+
+        internal static void UseTheActualProcChainMaskGodDamnit(ILManipulationInfo info)
         {
-            ILCursor c = new(il);
+            ILWeaver w = new(info);
             // moving after "procChainMask = default(ProcChainMask)"
-            if (!c.TryGotoNext(MoveType.After,
+            w.MatchRelaxed(
                 x => x.MatchDup(),
                 x => x.MatchLdflda<BlastAttack>("procChainMask"),
-                x => x.MatchInitobj<ProcChainMask>()
-            ))
-            {
-                Log.Error("COULD NOT IL HOOK IL.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor");
-                LogILStuff(il, c);
-                return;
-            }
-            try
-            {
-                // why does runic lens reset the procchainmask even though the real one is easily accessible???????
-                c.Emit(OpCodes.Dup);
-                c.Emit(OpCodes.Ldloc_0);
-                c.EmitDelegate<Action<BlastAttack, DamageInfo>>((blastAttack, damageInfo) =>
+                x => x.MatchInitobj<ProcChainMask>() && w.SetCurrentTo(x)
+            ).ThrowIfFailure();
+            w.InsertAfterCurrent(
+                w.Create(OpCodes.Dup),
+                w.Create(OpCodes.Ldloc_0),
+                w.CreateDelegateCall((BlastAttack blastAttack, DamageInfo damageInfo) =>
                 {
+                    // why does runic lens reset the procchainmask even though the real one is easily accessible???????
                     blastAttack.procChainMask = damageInfo.procChainMask;
-                });
-            }
-            catch (Exception e)
-            {
-                Log.Error($"COULD NOT EMIT INTO IL.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor DUE TO:\n{e}");
-                LogILStuff(il, c);
-            }
+                })
+            );
         }
 
 
 
-        internal static void HealthComponent_TakeDamage(On.RoR2.HealthComponent.orig_TakeDamage orig, HealthComponent self, DamageInfo damageInfo)
+        internal static void DebugLogProcChainMask(HealthComponent self, ref DamageInfo damageInfo)
         {
-            orig(self, damageInfo);
             Log.Warning($"ProcChainMask is {damageInfo.procChainMask}");
-        }
-
-        private static void LogILStuff(ILContext il, ILCursor c)
-        {
-            Log.Warning($"cursor is {c}");
-            Log.Warning($"il is {il}");
         }
     }
 }

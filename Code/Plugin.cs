@@ -1,4 +1,7 @@
+using System;
 using BepInEx;
+using MonoDetour;
+using MonoDetour.HookGen;
 using RoR2;
 
 namespace AddRunicLensToProcChain
@@ -9,15 +12,30 @@ namespace AddRunicLensToProcChain
         public const string PluginGUID = PluginAuthor + "." + PluginName;
         public const string PluginAuthor = "LordVGames";
         public const string PluginName = "AddRunicLensToProcChain";
-        public const string PluginVersion = "1.0.2";
+        public const string PluginVersion = "1.0.4";
+
         public void Awake()
         {
             Log.Init(Logger);
-            IL.RoR2.GlobalEventManager.ProcessHitEnemy += Main.AddRunicLensToProcChainMask;
-            IL.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor += Main.UseTheActualProcChainMaskGodDamnit;
+            MonoDetourManager.InvokeHookInitializers(typeof(Plugin).Assembly);
+        }
+
 #if DEBUG
-            On.RoR2.HealthComponent.TakeDamage += Main.HealthComponent_TakeDamage;
+        [MonoDetourTargets(typeof(HealthComponent))]
 #endif
+        [MonoDetourTargets(typeof(GlobalEventManager))]
+        [MonoDetourTargets(typeof(MeteorAttackOnHighDamageBodyBehavior))]
+        private static class Hooks
+        {
+            [MonoDetourHookInitialize]
+            private static void Setup()
+            {
+#if DEBUG
+                Mdh.RoR2.HealthComponent.TakeDamage.Postfix(Main.DebugLogProcChainMask);
+#endif
+                Mdh.RoR2.GlobalEventManager.ProcessHitEnemy.ILHook(Main.AddRunicLensToProcChainMask);
+                Mdh.RoR2.MeteorAttackOnHighDamageBodyBehavior.DetonateRunicLensMeteor.ILHook(Main.UseTheActualProcChainMaskGodDamnit);
+            }
         }
     }
 }
